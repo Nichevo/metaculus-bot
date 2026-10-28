@@ -2,6 +2,11 @@ name: Test Bot
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Don't post forecasts to Metaculus"
+        type: boolean
+        default: false
 
 # Add concurrency group to prevent parallel runs
 concurrency:
@@ -28,7 +33,7 @@ jobs:
         run: uv sync --locked
       - name: Run bot
         run: |
-          uv run python main.py --mode test_questions
+          uv run python main.py --mode test_questions ${{ inputs.dry_run && '--dry-run' || '' }}
         # this reads the environment variables from the github repository.
         # Store under Settings --> Secrets and variables --> Actions
         env:
@@ -40,3 +45,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ASKNEWS_CLIENT_ID: ${{ secrets.ASKNEWS_CLIENT_ID }}
           ASKNEWS_SECRET: ${{ secrets.ASKNEWS_SECRET }}
+          FORECASTER_MODEL: ${{ vars.FORECASTER_MODEL }}
+          PARSER_MODEL: ${{ vars.PARSER_MODEL }}
+          SUMMARIZER_MODEL: ${{ vars.SUMMARIZER_MODEL }}
+          RESEARCHER_MODEL: ${{ vars.RESEARCHER_MODEL }}
