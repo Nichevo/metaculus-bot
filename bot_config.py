@@ -55,9 +55,10 @@ def build_llms() -> dict[str, str | GeneralLlm]:
 
     llms: dict[str, str | GeneralLlm] = {}
     if forecaster:
+        # No temperature: Claude Sonnet/Haiku 5.5 reject non-default sampling
+        # parameters with a 400.
         llms["default"] = GeneralLlm(
             model=forecaster,
-            temperature=0.3,
             timeout=120,
             allowed_tries=2,
         )
