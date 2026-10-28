@@ -1,3 +1,20 @@
+# Jeff's Metaculus forecasting bot
+
+A bot for the [Metaculus AI benchmark tournament](https://www.metaculus.com/futureeval/participate/), built on Metaculus's official [bot template](https://github.com/Metaculus/metac-bot-template). The template's own README follows below; this section covers what differs here.
+
+## What's changed from the template
+- **Claude is the forecaster.** `bot_config.py` pins Claude Sonnet 5.5 for forecasting and Claude Haiku 5.5 for parsing and summarizing, through OpenRouter if `OPENROUTER_API_KEY` is set, otherwise through `ANTHROPIC_API_KEY`. Override any role with the `FORECASTER_MODEL`, `PARSER_MODEL`, `SUMMARIZER_MODEL` or `RESEARCHER_MODEL` env vars (or repository variables of the same name in GitHub Actions).
+- **Scheduled runs are off until you turn them on.** The tournament and Metaculus Cup workflows only run on their schedule once the repository variable `BOT_ENABLED` is `true`. Running them by hand always works.
+- **Dry runs.** `python main.py --dry-run` (and the "dry run" box on the Test Bot workflow) runs research and forecasts without posting anything to Metaculus.
+
+## Getting it running
+1. Create a bot account and token at https://www.metaculus.com/futureeval/participate/, and fill in the participation form there (it also requests free OpenRouter credits).
+2. In this repo, go to `Settings → Secrets and variables → Actions` and add the secrets `METACULUS_TOKEN` and `OPENROUTER_API_KEY` (or `ANTHROPIC_API_KEY`). Optionally add `ASKNEWS_CLIENT_ID` and `ASKNEWS_SECRET` for better research, and set the variable `RESEARCHER_MODEL` to `asknews/news-summaries`.
+3. Run `Actions → Test Bot → Run workflow`. It forecasts on the bot-testing-area tournament; check the bot account to see the forecasts landed.
+4. Add the repository variable `BOT_ENABLED` = `true` to start forecasting on the tournament every 20 minutes.
+
+---
+
 # Simple Metaculus forecasting bot
 This repository contains a simple bot meant to get you started with creating your own bot for the AI Forecasting Tournament. Go to https://www.metaculus.com/futureeval/participate/ for more info and tournament rules (and then go to the  "Getting Started" section of our [resources](https://www.metaculus.com/notebooks/38928/ai-benchmark-resources/#want-to-join-the-ai-forecasting-benchmark) page).
 
